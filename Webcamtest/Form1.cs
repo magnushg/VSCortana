@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Speech.Synthesis;
 using System.Windows.Forms;
 using CamCaptureLib;
 
@@ -11,11 +12,24 @@ namespace Webcamtest
         public Form1()
         {
             InitializeComponent();
+ 
+
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
+            var result = await camcam.GetEmotions();
+            label1.Text = result.BuildError();
+            this.Text = label1.Text;
+            pictureBox1.Image = result.Image;
+            this.Refresh();
+            SpeechSynthesizer synth = new SpeechSynthesizer(); 
+            synth.SetOutputToDefaultAudioDevice();
 
+            // Speak a string.
+            synth.Speak(label1.Text);
+            pictureBox1.Image = result.Image;
+Application.Exit();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)

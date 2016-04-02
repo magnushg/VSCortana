@@ -13,17 +13,14 @@ namespace EmotionSpeaker
         static void Main(string[] args)
         {
             var cam = new CamCam();
-            var emotions =  cam.GetEmotions();
+
+            Task.Run(async () => {
+                                     var emotions = await cam.GetEmotions();
+                                     Console.WriteLine("error");
+                                     Console.ReadLine();
+
+            });
             Thread.Sleep(10000);
-            if (emotions.IsCompleted)
-            {
-                Console.WriteLine(emotions.Result.BuildError());
-            }
-            else
-            {
-                Console.WriteLine("error");
-            }
-            Console.ReadLine();
         }
     }
 }
