@@ -28,6 +28,8 @@ namespace Webcamtest
         {
             var result = await camcam.GetEmotions();
             label1.Text = result.BuildError();
+            Speak s = new Speak();
+            s.SpeakText(label1.Text);
             pictureBox1.Image = result.Image;
         }
 
