@@ -4,11 +4,13 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.ProjectOxford.Emotion;
 using Microsoft.ProjectOxford.Emotion.Contract;
 using WebEye.Controls.WinForms.WebCameraControl;
+using Timer = System.Timers.Timer;
 
 namespace CamCaptureLib
 {
@@ -25,7 +27,7 @@ namespace CamCaptureLib
            
             timer = new Timer(10000);
             timer.Elapsed += timer_Elapsed;
-            Start();
+     
         }
 
         async void timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -36,14 +38,21 @@ namespace CamCaptureLib
 
         public async Task<Emotion[]> GetEmotions()
         {
+            Start();
+            for (int xi = 0; xi < 10; xi++)
+            {
+                var t = cameraControl.GetCurrentImage();
+               
+            }
             var x = cameraControl.GetCurrentImage();
+            Stop();
             var tmpFile = Path.GetTempFileName();
             x.Save(tmpFile);
             var result = await emotionServiceClient.RecognizeAsync(File.OpenRead(tmpFile));
             return result;
         }
 
-        public bool Start()
+        private bool Start()
         {
             var id = cameraControl.GetVideoCaptureDevices().FirstOrDefault();
             if (id == null)
@@ -52,5 +61,11 @@ namespace CamCaptureLib
       //      timer.Start();
             return true;
         }
+
+        private void  Stop()
+        {
+            cameraControl.StopCapture();
+        }
+
     }
 }

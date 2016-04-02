@@ -12,7 +12,6 @@ namespace CamCaptureLib
         CamCam camcam = new CamCam();
         public Programmer()
         {
-            camcam.Start();
         }
 
         public async  Task<string> BuildError()
