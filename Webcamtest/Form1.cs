@@ -7,7 +7,7 @@ namespace Webcamtest
 {
     public partial class Form1 : Form
     {
-        Programmer programmer = new CamCaptureLib.Programmer();
+        CamCam camcam = new CamCaptureLib.CamCam();
         public Form1()
         {
             InitializeComponent();
@@ -23,13 +23,26 @@ namespace Webcamtest
  
         }
 
-        private async void button1_Click(object sender, EventArgs e)
-        {
-        }
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            label1.Text =  await programmer.BuildError();
+            var result = await camcam.GetEmotions();
+            label1.Text = result.BuildError();
+            pictureBox1.Image = result.Image;
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            var result = await camcam.GetEmotions();
+            label1.Text = result.BuildOK();
+            pictureBox1.Image = result.Image;
+        }
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            var result = await camcam.GetEmotions();
+            label1.Text = result.RunTests();
+            pictureBox1.Image = result.Image;
         }
     }
 }

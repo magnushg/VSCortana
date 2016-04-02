@@ -33,10 +33,10 @@ namespace CamCaptureLib
         async void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             var result = await GetEmotions();
-            var data = result.ToList();
+            var data = result.Emotions.ToList();
         }
 
-        public async Task<Emotion[]> GetEmotions()
+        public async Task<EmotionResult> GetEmotions()
         {
             Start();
             for (int xi = 0; xi < 10; xi++)
@@ -49,7 +49,11 @@ namespace CamCaptureLib
             var tmpFile = Path.GetTempFileName();
             x.Save(tmpFile);
             var result = await emotionServiceClient.RecognizeAsync(File.OpenRead(tmpFile));
-            return result;
+            return new EmotionResult
+            {
+                Emotions = result,
+                Image = x
+            };
         }
 
         private bool Start()
